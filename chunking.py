@@ -21,3 +21,16 @@ for file in files:
 from pprint import pprint
 
 pprint(file_texts[0].page_content)
+pprint(file_texts[0].metadata)
+
+from langchain.vectorstores import FAISS
+from langchain_community.embeddings import HuggingFaceEmbeddings
+
+embeddings = HuggingFaceEmbeddings()
+vector_store = FAISS.from_documents(
+    file_texts, 
+    embedding=embeddings
+)
+
+retriever = vector_store.as_retriever(top_k=4)
+retriever.invoke("What year was Big Star Collectibles Started?")
